@@ -1,12 +1,14 @@
-# make docker compose
-version: "3.7"
-
-# make docker compose config from notes_app images
 services:
-  web:
-    image: notes_app:latest
+  my-project-with-air:
+    image: cosmtrek/air
+    # working_dir value has to be the same of mapped volume
+    working_dir: /notes_app
     ports:
-      - "3000:3000"
-    # environment variables from .env
+      - 3000:3000
     env_file:
       - .env
+    # add env prod
+    environment:
+      - ENV=production
+    volumes:
+      - .:/notes_app

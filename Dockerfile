@@ -5,7 +5,7 @@ FROM golang:alpine3.16 as builder
 RUN apk update && apk add --no-cache git
 WORKDIR /app
 COPY . .
-RUN go build -o notes_app app/*.go 
+RUN go build -o notes_app .
 
 # run stage
 FROM alpine

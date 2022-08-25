@@ -47,10 +47,17 @@ func (u UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	response := helpers.HttpResponse{
+		Message: "user created",
+		Data: map[string]interface{}{
+			"user": user,
+		},
+	}
+
 	// return response
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(response)
 }
 
 func (u UserHandler) Login(w http.ResponseWriter, r *http.Request) {
@@ -79,10 +86,17 @@ func (u UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	response := helpers.HttpResponse{
+		Message: "login success",
+		Data: map[string]interface{}{
+			"user": user,
+		},
+	}
+
 	// return response
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(response)
 }
 func (u UserHandler) FindUser(w http.ResponseWriter, r *http.Request) {
 	// get request form query params
@@ -109,9 +123,16 @@ func (u UserHandler) FindUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	response := helpers.HttpResponse{
+		Message: "user found",
+		Data: map[string]interface{}{
+			"user": user,
+		},
+	}
+
 	// return response
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(response)
 
 }

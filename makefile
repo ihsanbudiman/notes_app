@@ -2,7 +2,7 @@ generate:
 	sqlc generate
 
 engine:
-	go build -o ${BINARY} app/*.go
+	go build -o ${BINARY} .
 
 serve:
 	sudo docker-compose up --no-deps --build
@@ -14,3 +14,5 @@ run:
 	make build
 	sudo docker-compose -f dev-docker-compose.yaml up --no-deps --build
 
+dev:
+	sudo docker-compose -f dev-docker-compose.yaml up
