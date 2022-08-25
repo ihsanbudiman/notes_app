@@ -1,5 +1,5 @@
 # make docker compose
-version: "3.7"
+version: "3.3"
 
 # make docker compose config from notes_app images
 services:
