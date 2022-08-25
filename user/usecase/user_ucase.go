@@ -113,16 +113,16 @@ func (u UserUseCaseImpl) FindUser(ctx context.Context, id int) (domain.User, err
 }
 
 // Login implements domain.UserUsecase
-func (u UserUseCaseImpl) Login(ctx context.Context, username string, password string) (domain.User, error) {
+func (u UserUseCaseImpl) Login(ctx context.Context, username string, password string) (domain.LoginResponse, error) {
 	// check if username and password is not empty
 	if username == "" || password == "" {
-		return domain.User{}, errors.New("username and password cannot be empty")
+		return domain.LoginResponse{}, errors.New("username and password cannot be empty")
 	}
 
 	// call repository
 	user, err := u.UserRepo.Login(ctx, username)
 	if err != nil {
-		return domain.User{}, err
+		return domain.LoginResponse{}, err
 	}
 
 	fmt.Println(user.Password, password)
@@ -130,14 +130,23 @@ func (u UserUseCaseImpl) Login(ctx context.Context, username string, password st
 	// verify the password
 	ok, err := helpers.ArgonVerify(password, user.Password)
 	if err != nil {
-		return domain.User{}, err
+		return domain.LoginResponse{}, err
 	}
 
 	if !ok {
-		return domain.User{}, errors.New("password not match")
+		return domain.LoginResponse{}, errors.New("password not match")
 	}
 
-	return user, nil
+	token, err := helpers.GenerateJwt(user)
+	if err != nil {
+		return domain.LoginResponse{}, err
+	}
+
+	finalData := domain.LoginResponse{
+		Token: token,
+		User:  user,
+	}
+	return finalData, nil
 }
 
 // Register implements domain.UserUsecase

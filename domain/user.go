@@ -31,6 +31,12 @@ func (u User) MarshalJSON() ([]byte, error) {
 	})
 }
 
+type LoginResponse struct {
+	Token string `json:"token"`
+	// user
+	User User `json:"user"`
+}
+
 type UserRepo interface {
 	Register(ctx context.Context, user User) (User, error)
 	Login(ctx context.Context, username string) (User, error)
@@ -43,7 +49,7 @@ type UserRepo interface {
 
 type UserUsecase interface {
 	Register(ctx context.Context, user User) (User, error)
-	Login(ctx context.Context, username string, password string) (User, error)
+	Login(ctx context.Context, username string, password string) (LoginResponse, error)
 	FindUser(ctx context.Context, id int) (User, error)
 	CheckUniqueUserByUsername(ctx context.Context, username string) (bool, error)
 	CheckUniqueUserByEmail(ctx context.Context, email string) (bool, error)

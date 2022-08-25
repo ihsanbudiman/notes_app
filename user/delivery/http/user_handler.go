@@ -6,8 +6,10 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
+
 	"github.com/ihsanbudiman/notes_app/domain"
 	"github.com/ihsanbudiman/notes_app/helpers"
+	"github.com/ihsanbudiman/notes_app/user/delivery/http/middleware"
 )
 
 type UserHandler struct {
@@ -24,7 +26,7 @@ func NewUserHandler(r *chi.Mux, u domain.UserUsecase) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Post("/register", helpers.RecoverWrap(handler.Register))
 			r.Post("/login", helpers.RecoverWrap(handler.Login))
-			r.Get("/", helpers.RecoverWrap(handler.FindUser))
+			r.With(middleware.MyMiddleware).Get("/", helpers.RecoverWrap(handler.FindUser))
 		})
 	})
 
@@ -74,14 +76,14 @@ func (u UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// call usecase
-	user, err := u.UserUsecase.Login(r.Context(), req.Username, req.Password)
+	loginData, err := u.UserUsecase.Login(r.Context(), req.Username, req.Password)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// if user is empty
-	if user.ID == 0 {
+	if loginData.User.ID == 0 {
 		http.Error(w, "user not found", http.StatusNotFound)
 		return
 	}
@@ -89,7 +91,8 @@ func (u UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	response := helpers.HttpResponse{
 		Message: "login success",
 		Data: map[string]interface{}{
-			"user": user,
+			"user":  loginData.User,
+			"token": loginData.Token,
 		},
 	}
 
