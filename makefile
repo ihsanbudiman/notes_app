@@ -5,7 +5,7 @@ engine:
 	go build -o ${BINARY} .
 
 serve:
-	sudo docker-compose up --no-deps --build
+	sudo docker-compose up -d
 
 build:
 	docker build -t notes_app:latest .
