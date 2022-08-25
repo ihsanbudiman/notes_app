@@ -1,0 +1,21 @@
+version: "2"
+overrides: 
+  go:
+    overrides:
+      - db_type: "sql.NullString"
+        nullable: true
+        engine: "postgresql"
+        go_type:
+          import: "gopkg.in/guregu/null.v4"
+          package: "null"
+          type: "Time"
+sql:
+    - schema: "migration/schema.sql"
+      queries: "migration/query.sql"
+      engine: "postgresql"
+      gen:
+          go:
+              package: "sqlcpg"
+              out: "sqlcpg"
+              emit_interface: true
+              
