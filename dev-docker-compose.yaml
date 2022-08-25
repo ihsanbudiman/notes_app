@@ -4,12 +4,9 @@ version: "3.7"
 # make docker compose config from notes_app images
 services:
   web:
-    build: .
+    image: notes_app:latest
     ports:
       - "3000:3000"
     # environment variables from .env
     env_file:
       - .env
-    # add env prod
-    environment:
-      - ENV=production
