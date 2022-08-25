@@ -1,0 +1,12 @@
+# make docker compose
+version: "3.7"
+
+# make docker compose config from notes_app images
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    # environment variables from .env
+    env_file:
+      - .env

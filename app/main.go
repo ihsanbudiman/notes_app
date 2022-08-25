@@ -1,11 +1,11 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -13,20 +13,20 @@ import (
 	user_handler "github.com/ihsanbudiman/notes_app/user/delivery/http"
 	user_repo_pg "github.com/ihsanbudiman/notes_app/user/repository/postgres"
 	user_ucase "github.com/ihsanbudiman/notes_app/user/usecase"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "103.171.85.68"
-	port     = 5433
-	user     = "postgres"
-	password = "postgress"
-	dbname   = "notes_app"
-)
-
 func main() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+
 	// make connection to postgres
-	db, err := sql.Open("postgres", fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname))
+	var conn = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", os.Getenv("PGHOST"), os.Getenv("PGPORT"), os.Getenv("PGUSER"), os.Getenv("PGPASSWORD"), os.Getenv("PGDBNAME"))
+
+	db, err := sql.Open("postgres", conn)
 	if err != nil {
 		log.Fatalf("failed to connect to database")
 	}
@@ -43,12 +43,6 @@ func main() {
 	defer db.Close()
 
 	sqlc := sqlcpg.New(db)
-
-	data, err := sqlc.FindUserByEmail(context.Background(), sql.NullString{
-		String: "ninoidgt@gmail.coms",
-		Valid:  true,
-	})
-	fmt.Println(data, err)
 
 	userRepo := user_repo_pg.NewPostgresUserRepo(sqlc)
 	userUseCase := user_ucase.NewUserUseCase(userRepo)

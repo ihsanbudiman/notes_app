@@ -1,11 +1,11 @@
 # build a golang image multistage
-FROM golang:alpine3.16 as builder
 
+# build stage
+FROM golang:alpine3.16 as builder
 RUN apk update && apk add --no-cache git
 WORKDIR /app
 COPY . .
 RUN go build -o notes_app app/*.go 
-
 
 # run stage
 FROM alpine

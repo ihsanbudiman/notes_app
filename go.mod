@@ -8,6 +8,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-chi/chi/v5 v5.0.7 // indirect
 	github.com/guregu/null v4.0.0+incompatible // indirect
+	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/lib/pq v1.10.6 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/objx v0.4.0 // indirect
