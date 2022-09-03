@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"errors"
 	"os"
 	"time"
 
@@ -10,6 +11,10 @@ import (
 
 func GenerateJwt(user domain.User) (string, error) {
 	mySigningKey := []byte(os.Getenv("JWT_SECRET"))
+
+	if user.ID == 0 {
+		return "", errors.New("user id cannot be empty")
+	}
 
 	// Create claims while leaving out some of the optional fields
 	claims := domain.TokenClaims{

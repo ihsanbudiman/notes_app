@@ -39,7 +39,7 @@ func MyMiddleware(next http.Handler) http.Handler {
 		}
 
 		// set context
-		ctx := context.WithValue(r.Context(), "credentials", tokenClaims)
+		ctx := context.WithValue(r.Context(), `credentials`, tokenClaims)
 		r = r.WithContext(ctx)
 
 		// call next handler

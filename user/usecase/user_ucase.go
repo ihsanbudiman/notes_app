@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/ihsanbudiman/notes_app/domain"
 	"github.com/ihsanbudiman/notes_app/helpers"
@@ -125,8 +124,6 @@ func (u UserUseCaseImpl) Login(ctx context.Context, username string, password st
 		return domain.LoginResponse{}, err
 	}
 
-	fmt.Println(user.Password, password)
-
 	// verify the password
 	ok, err := helpers.ArgonVerify(password, user.Password)
 	if err != nil {
@@ -168,7 +165,6 @@ func (u UserUseCaseImpl) Register(ctx context.Context, user domain.User) (domain
 
 	// hash the password
 	password, err := helpers.ArgonHash(user.Password)
-	fmt.Println(password)
 	if err != nil {
 		return domain.User{}, err
 	}
